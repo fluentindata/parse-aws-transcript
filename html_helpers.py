@@ -59,6 +59,9 @@ def inject_header():
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link href="/reset.css" rel="stylesheet">
     <link href="/styles.css" rel="stylesheet">
+    
+    <link href="/parse-aws-transcript/reset.css" rel="stylesheet">
+    <link href="/parse-aws-transcript/styles.css" rel="stylesheet">
     """
 
 
