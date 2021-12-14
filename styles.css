@@ -4,7 +4,7 @@ font-size: 100%;
 }
 
 #panel {
-    text-align:center
+    text-align:center;
 }
 
 #player {
@@ -38,8 +38,9 @@ font-size: 100%;
 
 }
 .paragraph:hover {
-    background-color: lightblue;
+    background-color: 0x000001;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .text_panel {
@@ -49,19 +50,19 @@ font-size: 100%;
 }
 
 .time {
-
+    color: black;
+    font-weight: lighter;
+    margin-left: 0.5rem;
 }
 
 .speaker {
     font-family: 'Lato';
     font-weight: bold;
-    margin-bottom: 0rem;
-    position: absolute;
-    right: 0px;
+    margin-bottom: 0.5rem;
 }
 
 .spk_0 {
-    color: #FC766AFF;    
+    color: #FC766AFF;
 }
 
 .spk_1 {

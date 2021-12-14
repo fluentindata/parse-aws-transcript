@@ -1,4 +1,6 @@
+import datetime
 import json
+import math
 
 from html_helpers import inject_video_player, inject_header, inject_footer
 
@@ -113,9 +115,10 @@ if __name__ == '__main__':
 
     speaker_annotated_html_paragraphs = []
     for speaker, speaker_label, start_time, words in speaker_segments:
-        speaker_annotated_html_paragraphs.append('<h3 class="speaker {}">{} {}</h3> <p class="paragraph" '
-                                                 'onclick="svt({})">{}</p>'.format
-                                                 (speaker_label, speaker , start_time, start_time, " ".join(words)))
+        human_friendly_display_time = str(datetime.timedelta(seconds=math.floor(float(start_time))))
+        speaker_annotated_html_paragraphs.append('<h3 class="speaker {}">{}<span class="time">{}</span></h3>'
+                                                 '<p class="paragraph" onclick="svt({})">{}</p>'.format
+                                                 (speaker_label, speaker, human_friendly_display_time, start_time, " ".join(words)))
     if joined_text == text:
         print("MATCHES")
 
