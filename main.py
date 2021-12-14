@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
     print(speaker_annotated_html_paragraphs)
 
-    with open("output.html", 'w') as output:
+    with open("index.html", 'w') as output:
         output.write(inject_header())
         output.write(inject_video_player('_OtZ49i-yyk'))
         output.write("""<h1 class='title'>Is Property Theft?</h1>""")
