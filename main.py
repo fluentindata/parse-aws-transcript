@@ -47,13 +47,18 @@ def extract_speaker_segments(speaker_labels, time_word_map, speaker_map):
     return list_of_segments_tupled
 
 
-def combine_same_speaker_segments(speaker_segments):
+def combine_same_speaker_segments(speaker_segments, max_segment_size=100):
     combined_segments = []
     last_seen_speaker = None
     for speaker, speaker_label, start_time, words in speaker_segments:
-        if last_seen_speaker is None or speaker != last_seen_speaker:
+        if (
+                last_seen_speaker is None
+                or speaker != last_seen_speaker
+                or len(words) > max_segment_size
+        ):
             combined_segments.append((speaker, speaker_label, start_time, words))
             last_seen_speaker = speaker
+
 
         elif speaker == last_seen_speaker:
             # get last added segment
@@ -73,6 +78,7 @@ if __name__ == '__main__':
     built_transcript = []
     start_times = []
 
+    # what is this used for?
     time_to_word = {}
 
     # using to hold state on start_time to add punctuation after-the-fact
@@ -105,13 +111,13 @@ if __name__ == '__main__':
         "spk_1": "Robert Murphy",
     }
     speaker_segments = extract_speaker_segments(speaker_labels, time_to_word, speaker_map)
-    speaker_segments = combine_same_speaker_segments(speaker_segments)
+    speaker_segments = combine_same_speaker_segments(speaker_segments, max_segment_size=200)
 
     joined_text = "".join(built_transcript)
     print(joined_text)
 
-    for speaker, speaker_label, start_time, words in speaker_segments:
-        print("{}@ {}: {}".format(speaker, start_time, " ".join(words)))
+    # for speaker, speaker_label, start_time, words in speaker_segments:
+    #     print("{}@ {}: {}".format(speaker, start_time, " ".join(words)))
 
     speaker_annotated_html_paragraphs = []
     for speaker, speaker_label, start_time, words in speaker_segments:
@@ -131,6 +137,7 @@ if __name__ == '__main__':
         output.write('<div class="text_panel">')
         # output.write('<script>var video_start_times = {}</script>'.format(start_times))
         output.write("".join(speaker_annotated_html_paragraphs))
+        # output.write(" ".join(built_transcript))
         output.write('</div>')
         output.write(inject_footer())
 

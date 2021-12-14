@@ -50,9 +50,9 @@ font-size: 100%;
 }
 
 .time {
-    color: black;
-    font-weight: lighter;
+    color: lightgray;
     margin-left: 0.5rem;
+    font-size: 0.9rem;
 }
 
 .speaker {
