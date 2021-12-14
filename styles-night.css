@@ -1,0 +1,96 @@
+html {
+font-size: 100%;
+}
+
+#panel {
+    text-align:center
+}
+
+#player {
+    height: 25rem;
+}
+
+.title {
+    text-align: center;
+    margin-top: 3rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    margin-bottom: 5rem;
+    line-height: 9rem;
+    font-size: 6.10352em;
+    font-family: "Abril Fatface";
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0em;
+}
+
+.paragraph {
+    display: table;
+    margin-bottom: 3rem;
+    line-height: 2.5rem;
+    font-size: 1.2rem;
+    font-family: Lato;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0em;
+
+    transition: background-color 1s ease-out 100ms
+}
+.paragraph:hover {
+    background-color: lightblue;
+    border-radius: 5px;
+}
+
+.text_panel {
+    padding-left: 15rem;
+    padding-right: 15rem;
+
+}
+
+.time {
+
+}
+
+.speaker {
+    font-family: 'Lato';
+    font-weight: bold;
+    margin-bottom: 0rem;
+    position: absolute;
+    right: 0px;
+}
+
+.spk_0 {
+    color: #FC766AFF;    
+}
+
+.spk_1 {
+    color: #5B84B1FF;
+}
+
+
+
+@media only screen and (min-width: 992px) {}
+@media only screen and (max-width: 992px) {
+    .text_panel {
+    padding-left: 5rem;
+    padding-right: 5rem;
+    }
+}
+}
+@media only screen and (max-width: 768px) {
+    .text_panel {
+    padding-left: 3rem;
+    padding-right: 3rem;
+    }
+}
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .title {
+        font-size: 4.10352em;
+        line-height: 5rem;
+    }
+    .text_panel {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}

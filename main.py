@@ -1,6 +1,6 @@
 import json
 
-from html_helpers import inject_video_player
+from html_helpers import inject_video_player, inject_header, inject_footer
 
 
 def load_transcript_from_json(transcript_path):
@@ -26,20 +26,21 @@ def get_all_words_between(start_time, end_time, time_word_map):
             start_time <= k < end_time]
 
 
-def extract_speaker_segments(speaker_labels, time_word_map):
+def extract_speaker_segments(speaker_labels, time_word_map, speaker_map):
+    # speaker_map { "spk_0": "Jordan",}
     speakers = speaker_labels.get('speakers')
     segments = speaker_labels.get('segments')
 
     list_of_segments_tupled = []
 
     for segment in segments:
-        speaker = segment.get('speaker_label')
-
+        speaker_label = segment.get('speaker_label')
+        speaker = speaker_map[speaker_label]
         start_time = float(segment.get('start_time'))
         end_time = float(segment.get('end_time'))
         words = get_all_words_between(start_time, end_time, time_word_map)
 
-        list_of_segments_tupled.append((speaker, start_time, words))
+        list_of_segments_tupled.append((speaker, speaker_label,  start_time, words))
 
     return list_of_segments_tupled
 
@@ -47,20 +48,16 @@ def extract_speaker_segments(speaker_labels, time_word_map):
 def combine_same_speaker_segments(speaker_segments):
     combined_segments = []
     last_seen_speaker = None
-    for speaker, start_time, words in speaker_segments:
+    for speaker, speaker_label, start_time, words in speaker_segments:
         if last_seen_speaker is None or speaker != last_seen_speaker:
-            combined_segments.append((speaker, start_time, words))
+            combined_segments.append((speaker, speaker_label, start_time, words))
             last_seen_speaker = speaker
 
         elif speaker == last_seen_speaker:
             # get last added segment
-            old_speaker, old_start_time, old_words = combined_segments[-1]
+            old_speaker, _, old_start_time, old_words = combined_segments[-1]
             old_words.extend(words)
     return combined_segments
-
-
-
-
 
 
 if __name__ == '__main__':
@@ -101,32 +98,38 @@ if __name__ == '__main__':
 
         # if len(built_transcript) > 1000:
         #     break
-
-    speaker_segments = extract_speaker_segments(speaker_labels, time_to_word)
+    speaker_map = {
+        "spk_0" : "Jordan Peterson",
+        "spk_1": "Robert Murphy",
+    }
+    speaker_segments = extract_speaker_segments(speaker_labels, time_to_word, speaker_map)
     speaker_segments = combine_same_speaker_segments(speaker_segments)
 
     joined_text = "".join(built_transcript)
     print(joined_text)
 
-    for speaker, start_time, words in speaker_segments:
+    for speaker, speaker_label, start_time, words in speaker_segments:
         print("{}@ {}: {}".format(speaker, start_time, " ".join(words)))
 
     speaker_annotated_html_paragraphs = []
-    for speaker, start_time, words in speaker_segments:
-        speaker_annotated_html_paragraphs.append('<h3 class="{}">{} {}</h3> <span class="word" class="word" '
-                                                 'onclick="svt({})">{}'.format
-                                                 (speaker, speaker, start_time, start_time, " ".join(words)))
+    for speaker, speaker_label, start_time, words in speaker_segments:
+        speaker_annotated_html_paragraphs.append('<h3 class="speaker {}">{} {}</h3> <p class="paragraph" '
+                                                 'onclick="svt({})">{}</p>'.format
+                                                 (speaker_label, speaker , start_time, start_time, " ".join(words)))
     if joined_text == text:
         print("MATCHES")
 
     print(speaker_annotated_html_paragraphs)
 
     with open("output.html", 'w') as output:
+        output.write(inject_header())
         output.write(inject_video_player('_OtZ49i-yyk'))
-        output.write('<div class="centerpanel">')
-        output.write('<script>var video_start_times = {}</script>'.format(start_times))
+        output.write("""<h1 class='title'>Is Property Theft?</h1>""")
+        output.write('<div class="text_panel">')
+        # output.write('<script>var video_start_times = {}</script>'.format(start_times))
         output.write("".join(speaker_annotated_html_paragraphs))
         output.write('</div>')
+        output.write(inject_footer())
 
     # for diff in dl.context_diff(joined_text, text):
     #     print(diff)
